@@ -13,15 +13,18 @@ from rest_framework import status
 # IMPORTING SERIALIZERS CLASS
 from . import serializers
 
+
+from . import models
+
 # Create your views here.
 
 
-class helloApiView(APIView):
+class HelloApiView(APIView):
     """
     THE API VIEW
     """
 
-    serializer_class = serializers.helloSerializer
+    serializer_class = serializers.HelloSerializer
 
     def get(self, request, format=None):
         """
@@ -43,7 +46,7 @@ class helloApiView(APIView):
         CREATES A HELLO MESSAGE WITH OUR NAME
         """
 
-        serializer = serializers.helloSerializer(data=request.data)
+        serializer = serializers.HelloSerializer(data=request.data)
 
         if serializer.is_valid():
             name = serializer.data.get("name")
@@ -75,12 +78,12 @@ class helloApiView(APIView):
         return Response({'method': 'delete'})
 
 
-class helloViewSet(viewsets.ViewSet):
+class HelloViewSet(viewsets.ViewSet):
     """
     TEST API VIEWSETS
     """
 
-    serializer_class = serializers.helloSerializer
+    serializer_class = serializers.HelloSerializer
 
     def list(self, request):
         """
@@ -99,7 +102,7 @@ class helloViewSet(viewsets.ViewSet):
         CREATE A NEW HELLO MESSAGE
         """
 
-        serializer = serializers.helloSerializer(data=request.data)
+        serializer = serializers.HelloSerializer(data=request.data)
 
         if serializer.is_valid():
             name = serializer.data.get("name")
@@ -136,3 +139,12 @@ class helloViewSet(viewsets.ViewSet):
         """
 
         return Response({"http_method": "delete"})
+
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    """
+    HANDLES CREATING, RETRIEVEING AND UPDATING PROFILES.
+    """
+    serializer_class = serializers.UserProfileSerializer
+
+    queryset = models.UserProfile.objects.all()

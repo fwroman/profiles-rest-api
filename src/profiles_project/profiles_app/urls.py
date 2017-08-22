@@ -7,9 +7,10 @@ from rest_framework.routers import DefaultRouter
 from . import views
 
 router = DefaultRouter()
-router.register("hello-vieset", views.helloViewSet, base_name="hello-viewset")
+router.register("hello-vieset", views.HelloViewSet, base_name="hello-viewset")
+router.register("profile", views.UserProfileViewSet)
 
 urlpatterns = [
-    url(r'^hello-view/', views.helloApiView.as_view()),
+    url(r'^hello-view/', views.HelloApiView.as_view()),
     url(r'', include(router.urls))
 ]
