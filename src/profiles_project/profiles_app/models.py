@@ -34,7 +34,7 @@ class UserProfileManager(BaseUserManager):
 
         # NEXT FUNCTIONS WILL ENCRYPT PASSWORD FOR US, RETURNING A HASH TO BE
         # STORED IN OUR DATABASE:
-        user.set_pasword(password)
+        user.set_password(password)
         #
         user.save(using=self._db)
 
@@ -50,7 +50,7 @@ class UserProfileManager(BaseUserManager):
         user.is_superuser = True
         user.is_staff = True
 
-        user.save(self._db)
+        user.save(using=self._db)
 
         return user
 
