@@ -12,15 +12,15 @@ from rest_framework import status
 # THIS IS USED TO ALLOW ONLY AUTHENTICATED USERS UPDATE OR DELETE INFORMATION:
 from rest_framework.authentication import TokenAuthentication
 
-# THIS IS USED TO FIND USERS BY FILTERS:
 from rest_framework import filters
+
+# THIS IS USED TO LOGIN USERS:
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework.authtoken.views import ObtainAuthToken
 
 # IMPORTING SERIALIZERS CLASS
 from . import serializers
-
-
 from . import models
-
 from . import permissions
 
 # Create your views here.
@@ -158,3 +158,16 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.UpdateOwnProfile,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name', 'email',)
+
+
+class LoginViewSet(viewsets.ViewSet):
+    """
+    CHECKS email AND password AND RETURNS AN AUTH TOKEN
+    """
+    serializer_class = AuthTokenSerializer
+
+    def create(self, request):
+        """
+        USE THE ObtainAuthToken APIView TO VALIDATE AND CREATE A TOKEN.
+        """
+        return ObtainAuthToken().post(request)
