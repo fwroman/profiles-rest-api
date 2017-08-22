@@ -89,3 +89,19 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
         DJANGO USES THIS WHEN IT NEEDS TO CONVERT THE OBJECT TO A STRING
         """
         return self.email
+
+
+class ProfileFeedItem(models.Model):
+    """
+    PROFILE STATUS UPDATE
+    """
+
+    user_profile = models.ForeignKey("UserProfile", on_delete=models.CASCADE)
+    status_text = models.CharField(max_length=255)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        """
+        RETURN THE MODEL AS STRING
+        """
+        return self.status_text
