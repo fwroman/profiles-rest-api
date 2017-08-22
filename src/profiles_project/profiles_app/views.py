@@ -1,5 +1,8 @@
 from django.shortcuts import render
 
+# VIEWS TO DO CRUD OPERATIONS TO DATABASE:
+from rest_framework import viewsets
+
 # IMPORTING API VIEW FROM DJANGO-REST-FRAMEWORK:
 from rest_framework.views import APIView
 # STANDARD RESPONSE OBJECT WE RETURN FROM THIS VIEW:
@@ -70,3 +73,21 @@ class helloApiView(APIView):
         """
 
         return Response({'method': 'delete'})
+
+
+class helloViewSet(viewsets.ViewSet):
+    """
+    TEST API VIEWSETS
+    """
+
+    def list(self, request):
+        """
+        RETURN A HELLO MESSAGE.
+        """
+        a_viewset = [
+            'Uses actions (list, create, retrieve, update, partial_update)',
+            "Automatically maps to URL's using Routers",
+            "Providers more functionality with less code.",
+        ]
+
+        return Response({"message": "Hello", "a_viewset": a_viewset})
