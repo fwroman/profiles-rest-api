@@ -2,7 +2,6 @@ from django.shortcuts import render
 
 # VIEWS TO DO CRUD OPERATIONS TO DATABASE:
 from rest_framework import viewsets
-
 # IMPORTING API VIEW FROM DJANGO-REST-FRAMEWORK:
 from rest_framework.views import APIView
 # STANDARD RESPONSE OBJECT WE RETURN FROM THIS VIEW:
@@ -11,12 +10,18 @@ from rest_framework.response import Response
 from rest_framework import status
 # THIS IS USED TO ALLOW ONLY AUTHENTICATED USERS UPDATE OR DELETE INFORMATION:
 from rest_framework.authentication import TokenAuthentication
-
+# THIS IS USED TO SEARCH USERS BY A FILTER
 from rest_framework import filters
-
 # THIS IS USED TO LOGIN USERS:
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.authtoken.views import ObtainAuthToken
+
+# THIS IS USED TO ALLOW USERS TO UPDATE INFORMATION IF THEY'RE LOGGED OR RESTRICT
+# THEM TO READ INFORMATION ONLY
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+# THIS IS USED TO ALLOW USERS TO UPDATE OR READ INFORMATION IF THEY'RE LOGGED OR RESTRICT
+# THEM IF NOT
+from rest_framework.permissions import IsAuthenticated
 
 # IMPORTING SERIALIZERS CLASS
 from . import serializers
@@ -171,3 +176,23 @@ class LoginViewSet(viewsets.ViewSet):
         USE THE ObtainAuthToken APIView TO VALIDATE AND CREATE A TOKEN.
         """
         return ObtainAuthToken().post(request)
+
+
+class UserProfileFeedViewSet(viewsets.ModelViewSet):
+    """
+    HANDLES CREATING, READING AND UPDATING PROFILE FEED ITEMS
+    """
+
+    authentication_classes = (TokenAuthentication,)
+    serializer_class = serializers.ProfileFeedItemSerializer
+    queryset = models.ProfileFeedItem.objects.all()
+
+    # permission_classes = (permissions.PostOnStatus, IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.PostOnStatus, IsAuthenticated,)
+
+    def perform_create(self, serializer):
+        """
+        SETS THE USER PROFILE TO THE LOGGED IN USER
+        """
+
+        serializer.save(user_profile=self.request.user)
